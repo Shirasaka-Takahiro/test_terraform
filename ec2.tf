@@ -6,12 +6,12 @@ resource "aws_instance" "ec2-instance" {
   key_name               = aws_key_pair.key.id
   instance_type          = "${var.instance_type}"
   root_block_device {
-    volume_type = "gp2"
-    volume_size = "100"
+    volume_type = "${var.volume_type}"
+    volume_size = "${var.volume_size}"
   }
 
   tags = {
-    Name = "example"
+    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-${element(var.general_config["type"], "1")}"
   }
 }
 

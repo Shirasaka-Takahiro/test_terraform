@@ -4,8 +4,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
-  count              = length(var.availability_zones)
-  subnets            = [element(var.availability_zones, count.index)]
+  subnets            = [aws_subnet.public-subnet-1a.id, aws_subnet.public-subnet-1s.id]
   ip_address_type    = "ipv4"
 
   tags = {
