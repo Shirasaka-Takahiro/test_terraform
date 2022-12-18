@@ -1,8 +1,8 @@
 ##EC2
 resource "aws_instance" "ec2-instance" {
   ami                    = var.ami
+  subnet_id              = aws_subnet.public-subnet-1a.id
   vpc_security_group_ids = [aws_security_group.common.id, aws_security_group.ec2.id]
-  subnet_id              = "${var.public_subnet_1a}"
   key_name               = aws_key_pair.key.id
   instance_type          = var.instance_type
   root_block_device {
@@ -11,7 +11,7 @@ resource "aws_instance" "ec2-instance" {
   }
 
   tags = {
-    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-${element(var.general_config["type"], "1")}"
+    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-${var.general_config["type"]}01"
   }
 }
 

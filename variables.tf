@@ -4,7 +4,7 @@ variable "general_config" {
   default = {
     project     = "example"
     environment = "stg"
-    type        = ["web, wd, db"]
+    type        = "web"
   }
 }
 
