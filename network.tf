@@ -1,6 +1,6 @@
 ##VPC
 resource "aws_vpc" "vpc" {
-  cidr_block           = var.vpc
+  cidr_block           = "${var.vpc}"
   enable_dns_support   = true
   enable_dns_hostnames = true
 
@@ -12,8 +12,8 @@ resource "aws_vpc" "vpc" {
 ##Public Subnet 1a
 resource "aws_subnet" "public-subnet-1a" {
   vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = var.public_subnet_1a
-  availability_zone       = var.availability_zone_1a
+  cidr_block              = "${var.public_subnet_1a}"
+  availability_zone       = "${var.availability_zone_1a}"
   map_public_ip_on_launch = true
 
   tags = {
@@ -24,8 +24,8 @@ resource "aws_subnet" "public-subnet-1a" {
 ##Public Subnet 1a
 resource "aws_subnet" "public-subnet-1c" {
   vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = var.public_subnet_1c
-  availability_zone       = var.availability_zone_1c
+  cidr_block              = "${var.public_subnet_1c}"
+  availability_zone       = "${var.availability_zone_1c}"
   map_public_ip_on_launch = true
 
   tags = {
@@ -37,8 +37,8 @@ resource "aws_subnet" "public-subnet-1c" {
 ##Private Subnets
 resource "aws_subnet" "private-subnet-1a" {
   vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.private_subnet_1a
-  availability_zone = var.availability_zone_1a
+  cidr_block        = "${var.private_subnet_1a}"
+  availability_zone = "${var.availability_zone_1a}"
 
   tags = {
     Name = "${var.general_config["project"]}-${var.general_config["environment"]}-private-1a"
@@ -49,8 +49,8 @@ resource "aws_subnet" "private-subnet-1a" {
 ##Private Subnets
 resource "aws_subnet" "private-subnet-1c" {
   vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.private_subnet_1c
-  availability_zone = var.availability_zone_1c
+  cidr_block        = "${var.private_subnet_1c}"
+  availability_zone = "${var.availability_zone_1c}"
 
   tags = {
     Name = "${var.general_config["project"]}-${var.general_config["environment"]}-private-1c"
