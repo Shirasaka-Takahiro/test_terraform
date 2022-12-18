@@ -4,7 +4,7 @@ variable "general_config" {
   default = {
     project     = "example"
     environment = "stg"
-    type = ["web, wd, db"]
+    type        = ["web, wd, db"]
   }
 }
 
@@ -53,13 +53,13 @@ variable "instance_type" {
 
 variable "volume_type" {
   description = "The type of root block device"
-  type = string
-  default = "gp2"
+  type        = string
+  default     = "gp2"
 }
 
 variable "volume_size" {
   description = "The size of root block device"
-  default = 100
+  default     = 100
 }
 
 variable "key_name" {
