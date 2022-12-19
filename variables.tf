@@ -41,7 +41,7 @@ variable "subnets" {
       public-1c = {
         name = "public-1c",
         cidr = "10.0.30.0/24",
-        az   = "ap-northeast-1c"
+        az = "ap-northeast-1c"  
       },
     },
     private_subnets = {
@@ -53,7 +53,7 @@ variable "subnets" {
       private-1c = {
         name = "private-1c"
         cidr = "10.0.40.0/24"
-        az   = "ap-northeast-1c"
+        az = "ap-northeast-1c"
       }
     }
   }

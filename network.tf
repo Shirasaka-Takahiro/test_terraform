@@ -21,7 +21,7 @@ resource "aws_subnet" "public-subnets" {
   }
 }
 
-##Public Subnet
+##Private Subnet
 resource "aws_subnet" "private-subnets" {
   vpc_id            = aws_vpc.vpc.id
   for_each          = var.subnets.private_subnets
@@ -47,7 +47,7 @@ resource "aws_route_table" "public-route-tables" {
 ##Private Route Tables
 resource "aws_route_table" "private-route-tables" {
   vpc_id   = aws_vpc.vpc.id
-  for_each = var.subnets.public_subnets
+  for_each = var.subnets.private_subnets
 
   tags = {
     Name = "${var.general_config["project"]}-${var.general_config["environment"]}-private-rtb"

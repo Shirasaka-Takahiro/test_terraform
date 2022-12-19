@@ -4,8 +4,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
-  for_each           = var.subnets.public_subnets
-  subnets            = [each.key]
+  subnets            = [var.subnets.private_subnets.public-1a, var.subnets.private_subnets.public-1c]
   ip_address_type    = "ipv4"
 
   tags = {
