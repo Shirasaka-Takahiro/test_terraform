@@ -9,51 +9,36 @@ resource "aws_vpc" "vpc" {
   }
 }
 
-##Public Subnet 1a
-resource "aws_subnet" "public-subnet-1a" {
-  vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = var.public_subnet_1a
-  availability_zone       = var.availability_zone_1a
-  map_public_ip_on_launch = true
+##Public Subnet
+resource "aws_subnet" "public-subnets" {
+  vpc_id = aws_vpc.vpc.id
+  for_each = var.subnets.public_subnets
+  cidr_block = each.value.cidr
+  availability_zone = each.value.az
 
   tags = {
-    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-public-1a"
+    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-${each.value.name}"
   }
-
-}
-##Public Subnet 1a
-resource "aws_subnet" "public-subnet-1c" {
-  vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = var.public_subnet_1c
-  availability_zone       = var.availability_zone_1c
-  map_public_ip_on_launch = true
-
-  tags = {
-    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-public-1c"
-  }
-
 }
 
-##Private Subnets
-resource "aws_subnet" "private-subnet-1a" {
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.private_subnet_1a
-  availability_zone = var.availability_zone_1a
+##Public Route Tables
+resource "aws_route_table" "public-route-tables" {
+  vpc_id = aws_vpc.vpc.id
+  for_each = var.subnets.public_subnets
 
   tags = {
-    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-private-1a"
+    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-public-rtb"
   }
 
 }
 
-##Private Subnets
-resource "aws_subnet" "private-subnet-1c" {
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.private_subnet_1c
-  availability_zone = var.availability_zone_1c
+##Private Route Tables
+resource "aws_route_table" "private-route-tables" {
+  vpc_id = aws_vpc.vpc.id
+  for_each = var.subnets.public_subnets
 
   tags = {
-    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-private-1c"
+    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-private-rtb"
   }
 
 }
@@ -67,53 +52,24 @@ resource "aws_internet_gateway" "internet-gateway" {
   }
 }
 
-##Public Route Table
-resource "aws_route_table" "public-route-table" {
-  vpc_id = aws_vpc.vpc.id
-
-  tags = {
-    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-public-rtb"
-  }
-
-}
-
 ##Public Internet Gateway
 resource "aws_route" "public-internet-gateway" {
+  for_each = var.subnets.public_subnets
   gateway_id             = aws_internet_gateway.internet-gateway.id
-  route_table_id         = aws_route_table.public-route-table.id
+  route_table_id         = aws_route_table.public-route-tables[each.key].id
   destination_cidr_block = "0.0.0.0/0"
 }
 
-##Public Routes Association 1a
-resource "aws_route_table_association" "public-route-association-1a" {
-  subnet_id      = aws_subnet.public-subnet-1a.id
-  route_table_id = aws_route_table.public-route-table.id
+##Public Routes Association
+resource "aws_route_table_association" "public-routes-association" {
+  for_each = var.subnets.public_subnets
+  subnet_id      = aws_subnet.public-subnets[each.key].id
+  route_table_id = aws_route_table.public-route-tables[each.key].id
 }
 
-##Public Routes Association 1c
-resource "aws_route_table_association" "public-route-association-1c" {
-  subnet_id      = aws_subnet.public-subnet-1c.id
-  route_table_id = aws_route_table.public-route-table.id
-}
-
-##Private Route Table
-resource "aws_route_table" "private-route-table" {
-  vpc_id = aws_vpc.vpc.id
-
-  tags = {
-    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-private-rtb"
-  }
-
-}
-
-##Private Routes Association 1a
-resource "aws_route_table_association" "private-route-table-association-1a" {
-  subnet_id      = aws_subnet.private-subnet-1a.id
-  route_table_id = aws_route_table.private-route-table.id
-}
-
-##Private Routes Association 1c
-resource "aws_route_table_association" "private-route-table-association-1c" {
-  subnet_id      = aws_subnet.private-subnet-1c.id
-  route_table_id = aws_route_table.private-route-table.id
+##private Routes Association
+resource "aws_route_table_association" "private-routes-association" {
+  for_each = var.subnets.private_subnets
+  subnet_id      = aws_subnet.private_subnets[each.key].id
+  route_table_id = aws_route_table.private-route-tables[each.key].id
 }
