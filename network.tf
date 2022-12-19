@@ -21,6 +21,18 @@ resource "aws_subnet" "public-subnets" {
   }
 }
 
+##Public Subnet
+resource "aws_subnet" "private-subnets" {
+  vpc_id = aws_vpc.vpc.id
+  for_each = var.subnets.private_subnets
+  cidr_block = each.value.cidr
+  availability_zone = each.value.az
+
+  tags = {
+    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-${each.value.name}"
+  }
+}
+
 ##Public Route Tables
 resource "aws_route_table" "public-route-tables" {
   vpc_id = aws_vpc.vpc.id
