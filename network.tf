@@ -73,15 +73,15 @@ resource "aws_route" "public-internet-gateway" {
 }
 
 ##Public Routes Association
-resource "aws_route_table_association" "public-routes-association" {
+resource "aws_route_table_association" "public-route-tables-association" {
   for_each       = var.subnets.public_subnets
   subnet_id      = aws_subnet.public-subnets[each.key].id
   route_table_id = aws_route_table.public-route-tables[each.key].id
 }
 
-##private Routes Association
-resource "aws_route_table_association" "private-routes-association" {
+##Private Routes Association
+resource "aws_route_table_association" "private-route-tables-association" {
   for_each       = var.subnets.private_subnets
-  subnet_id      = aws_subnet.private_subnets[each.key].id
+  subnet_id      = aws_subnet.private-subnets[each.key].id
   route_table_id = aws_route_table.private-route-tables[each.key].id
 }
