@@ -1,7 +1,8 @@
 ##EC2
 resource "aws_instance" "ec2-instance" {
   ami                    = var.ami
-  subnet_id              = var.subnets.public_subnets[0]
+  for_each               = var.subnets.public_subnets
+  subnet_id              = aws_subnet.public-subnets[each.key].id
   vpc_security_group_ids = [aws_security_group.common.id, aws_security_group.ec2.id]
   key_name               = aws_key_pair.key.id
   instance_type          = var.instance_type
@@ -17,8 +18,8 @@ resource "aws_instance" "ec2-instance" {
 
 ##Elastic IP
 resource "aws_eip" "eip" {
-
-  instance = aws_instance.ec2-instance.id
+  for_each = aws_instance.ec2-instance
+  instance = each.value.id
   vpc      = true
 }
 

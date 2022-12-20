@@ -39,8 +39,9 @@ resource "aws_lb_target_group" "tg" {
 
 ##Attach target group to the alb
 resource "aws_lb_target_group_attachment" "tg-to-ec2" {
+  for_each         = aws_instance.ec2-instance
+  target_id        = each.value.id
   target_group_arn = aws_lb_target_group.tg.arn
-  target_id        = aws_instance.ec2-instance.id
 }
 
 ##Listener

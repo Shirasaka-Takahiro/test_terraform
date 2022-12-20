@@ -1,4 +1,4 @@
 provider "aws" {
-  profile = "terrafom-execuser"
+  profile = "tera-user"
   region  = "ap-northeast-1"
 }
