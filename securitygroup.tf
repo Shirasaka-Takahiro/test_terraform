@@ -4,7 +4,7 @@ resource "aws_security_group" "common" {
 
   ##internal
   ingress {
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = ["${var.vpc}"]
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -63,4 +63,26 @@ resource "aws_security_group" "alb" {
   tags = {
     Name = "${var.general_config["project"]}-${var.general_config["environment"]}-alb-sg"
   }
+}
+
+##Security Group form rds
+resource "aws_security_group" "rds" {
+  vpc_id = aws_vpc.vpc.id
+
+  ##internal
+  ingress {
+    cidr_blocks = ["${var.vpc}"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+  }
+
+  ##all_out
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+  }
+
 }
