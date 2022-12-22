@@ -12,7 +12,7 @@ resource "aws_instance" "ec2-instance" {
   }
 
   tags = {
-    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-${var.general_config["type"]}01"
+    Name = "${var.general_config["project"]}-${var.general_config["environment"]}-${var.general_config["type"]}"
   }
 }
 
